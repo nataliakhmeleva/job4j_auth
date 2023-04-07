@@ -6,5 +6,5 @@ import ru.job4j.auth.model.Person;
 import java.util.List;
 
 public interface PersonRepository extends CrudRepository<Person, Integer> {
-    List<Person> findAll();
+    List<Person> findAllByOrderByIdAsc();
 }
