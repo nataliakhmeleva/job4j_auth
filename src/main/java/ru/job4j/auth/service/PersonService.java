@@ -40,4 +40,9 @@ public class PersonService {
     public List<Person> findAll() {
         return personRepository.findAllByOrderByIdAsc();
     }
+
+    public Person findByUsername(String username) {
+        return personRepository.findByLogin(username);
+    }
+
 }
