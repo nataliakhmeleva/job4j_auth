@@ -28,8 +28,11 @@ public class PersonController {
     private BCryptPasswordEncoder encoder;
 
     @GetMapping("/")
-    public List<Person> findAll() {
-        return this.persons.findAll();
+    public ResponseEntity<List<Person>> findAll() {
+        return new ResponseEntity<>(
+                this.persons.findAll(),
+                HttpStatus.OK
+        );
     }
 
     @GetMapping("/{id}")
@@ -78,7 +81,7 @@ public class PersonController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody Person person) {
+    public ResponseEntity<?> signUp(@RequestBody Person person) {
         if (person.getLogin() == null || person.getPassword() == null) {
             throw new NullPointerException("Login and password mustn't be empty");
         }
@@ -87,6 +90,7 @@ public class PersonController {
         }
         person.setPassword(encoder.encode(person.getPassword()));
         persons.save(person);
+        return ResponseEntity.ok("success");
     }
 
     @ExceptionHandler(value = {NullPointerException.class})
