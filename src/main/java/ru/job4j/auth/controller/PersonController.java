@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.auth.model.Person;
+import ru.job4j.auth.model.PersonDTO;
 import ru.job4j.auth.service.PersonService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,5 +105,16 @@ public class PersonController {
             }
         }));
         LOGGER.error(e.getMessage());
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> updateDTO(@RequestBody PersonDTO personDTO) {
+        var person = this.persons.findByUsername(personDTO.getLogin());
+        if (person.getLogin() == null) {
+            throw new NullPointerException("Login mustn't be empty");
+        }
+        person.setPassword(personDTO.getPassword());
+        return new ResponseEntity<>(this.persons.update(person)
+                ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }
